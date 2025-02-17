@@ -9,5 +9,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def init_ui(self):
         self.matrix_smez_table.resizeColumnsToContents()
-        self.matrix_Gleft_table.resizeColumnsToContents()
         self.matrix_Gright_table.resizeColumnsToContents()

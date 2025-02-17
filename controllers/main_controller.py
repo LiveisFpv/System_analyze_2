@@ -15,7 +15,6 @@ class MainController:
             print("Множества G не созданы")
         else:
             self.__set_calculated_set(self.view.matrix_Gright_table,Gright_set)
-            self.__set_calculated_set(self.view.matrix_Gleft_table,Gleft_set)
     def __update_size(self):
         size=self.view.count.text()
         if str.isdigit(size):
