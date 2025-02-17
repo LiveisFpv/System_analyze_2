@@ -44,12 +44,12 @@ class Matrix:
         for el in queue_el:
             q=queue.PriorityQueue()
             q.put((0,el))
-            while not q.empty():
-                level,q_el=q.get()
-                levels[q_el]=max(levels[q_el],-level)
-                for v in self.__Gright_set[q_el]:
-                    if (-level)>=levels[v]:
-                        q.put((level-1,v))
+        while not q.empty():
+            level,q_el=q.get()
+            levels[q_el]=max(levels[q_el],-level)
+            for v in self.__Gright_set[q_el]:
+                if (-level)>=levels[v]:
+                    q.put((level-1,v))
         print(levels)
 
         
