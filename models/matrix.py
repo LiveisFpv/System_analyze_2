@@ -26,20 +26,48 @@ class Matrix:
             for j in range(self.__size):
                 if self.__adjacency_matrix[j][i] > 0:
                     self.__Gleft_set[i].append(j)
-    def get_matrixs(self)->tuple[list]|tuple[None]:
+    def get_matrixs(self)->list|None:
         if self.__size >0:
-            return (self.__Gright_set, self.__Gleft_set)
+            return self.__Gright_set_leveled
         else:
-            return None, None
+            return None
+    def get_node_transpose(self)->list|None:
+        try:
+            return self.__number
+        except:
+            RuntimeWarning("Number list dont exists")
+            return None
     def __create_leveled_Gright_matrix(self):
         queue_el=[]
         for i,el in enumerate(self.__Gleft_set):
             if len(el)==0:
                 queue_el.append(i)
-        self.__search_levels(queue_el)
-        
-        return None
-    def __search_levels(self,queue_el:list,):
+        levels=self.__search_levels(queue_el)
+        self.__Gright_to_leveled(levels)
+    
+    def __Gright_to_leveled(self,levels):
+        self.__Gright_set_leveled=self.__Gright_set.copy()
+        self.__number=[0]*self.__size
+        level={}
+        for i in range(len(levels)):
+            if level.get(levels[i])!=None:
+                level[levels[i]].append(i)
+            else:
+                level[levels[i]]=[i]
+        new_v=0
+        for i in range(max(levels)+1):
+            for v in level[i]:
+                self.__number[v]=new_v
+                new_v+=1
+        Gright_set_leveled_tmp=self.__Gright_set_leveled.copy()
+        for i in range(self.__size):
+            self.__Gright_set_leveled[i]=Gright_set_leveled_tmp[self.__number[i]]
+        for i in range(self.__size):
+            for j in range(len(self.__Gright_set_leveled[i])):
+                self.__Gright_set_leveled[i][j]=self.__number[self.__Gright_set_leveled[i][j]]
+
+
+    def __search_levels(self,queue_el:list):
         levels=[0]*self.__size
         for el in queue_el:
             q=queue.PriorityQueue()
@@ -50,7 +78,7 @@ class Matrix:
             for v in self.__Gright_set[q_el]:
                 if (-level)>=levels[v]:
                     q.put((level-1,v))
-        print(levels)
+        return levels
 
         
 

@@ -10,11 +10,20 @@ class MainController:
     def __on_button_click_calculate(self):
         self.__get_adjacency_matrix()
         self.model.set_adjacency_matrix(self.__adjacency_matrix)
-        Gright_set,Gleft_set = self.model.get_matrixs()  # Получаем данные из модели
+        Gright_set= self.model.get_matrixs()  # Получаем данные из модели
+        Numbers=self.model.get_node_transpose()
         if Gright_set is None:
             print("Множества G не созданы")
         else:
+            self.__to_one_start_node(Gright_set,Numbers)
             self.__set_calculated_set(self.view.matrix_Gright_table,Gright_set)
+            self.__set_calculated_set(self.view.matrix_Gleft_table,Numbers) 
+    def __to_one_start_node(self,G_set,Numbers):
+        for i in range(len(G_set)):
+            G_set[i]=[v+1 for v in G_set[i]]
+        for i in range(len(Numbers)):
+            Numbers[i]+=1
+
     def __update_size(self):
         size=self.view.count.text()
         if str.isdigit(size):
