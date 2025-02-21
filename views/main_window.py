@@ -8,5 +8,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.init_ui()
 
     def init_ui(self):
+        # Функции необходимые при инициализации интерфейса
         self.matrix_smez_table.resizeColumnsToContents()
         self.matrix_Gright_table.resizeColumnsToContents()

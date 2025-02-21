@@ -1,7 +1,9 @@
 import queue
 class Matrix:
+    
     def __init__(self):
         self.__size=0
+    # Установка матрицы смежности
     def set_adjacency_matrix(self, adjacency_matrix):
         # Проверка на пустую матрицу
         if not adjacency_matrix or not isinstance(adjacency_matrix, list):
@@ -14,29 +16,34 @@ class Matrix:
         self.__create_Gright_set()
         self.__create_Gleft_set()
         self.__create_leveled_Gright_matrix()
+    # Получение множество правых инциденций
     def __create_Gright_set(self):
         self.__Gright_set=[[]for _ in range(self.__size)]
         for i in range(self.__size):
             for j in range(self.__size):
                 if self.__adjacency_matrix[i][j] > 0:
                     self.__Gright_set[i].append(j)
+    # Получение множества левых инциденций
     def __create_Gleft_set(self):
         self.__Gleft_set=[[]for _ in range(self.__size)]
         for i in range(self.__size):
             for j in range(self.__size):
                 if self.__adjacency_matrix[j][i] > 0:
                     self.__Gleft_set[i].append(j)
+    # Открытый интерфейс для получения матриц
     def get_matrixs(self)->list|None:
         if self.__size >0:
             return self.__Gright_set_leveled
         else:
             return None
+    # Открытый интерфейс для получения новой нумерации
     def get_node_transpose(self)->list|None:
         try:
             return self.__number
         except:
             RuntimeWarning("Number list dont exists")
             return None
+    # Получение нововй матрицы правых инциденций
     def __create_leveled_Gright_matrix(self):
         queue_el=queue.Queue()
         in_v=[0]*self.__size
@@ -48,7 +55,7 @@ class Matrix:
                 in_v[v]+=1
         levels=self.__search_levels(queue_el,in_v)
         self.__Gright_to_leveled(levels)
-    
+    # Создание новой матрицы правых инцидентов с помощью перестановки координат
     def __Gright_to_leveled(self,levels):
         self.__Gright_set_leveled=self.__Gright_set.copy()
         self.__number=[0]*self.__size
@@ -70,9 +77,10 @@ class Matrix:
             for j in range(len(self.__Gright_set_leveled[i])):
                 self.__Gright_set_leveled[i][j]=self.__number[self.__Gright_set_leveled[i][j]]
 
-
+    # Устаревший метод получения уровней
     def __search_levels_old(self,queue_el:list):
         levels=[0]*self.__size
+        # Получение вершин перебором и перестройкой
         for el in queue_el:
             q=queue.PriorityQueue()
             q.put((0,el))
@@ -84,8 +92,10 @@ class Matrix:
                     q.put((level-1,v))
         return levels
 
+    # Новый метод получения уровней
     def __search_levels(self,queue_el:queue.Queue,in_v:list):
         levels=[0]*self.__size
+        # Получение уровней через учет входящих в вершину ребер
         while not queue_el.empty():
             level,v=queue_el.get()
             levels[v]=level
