@@ -38,11 +38,15 @@ class Matrix:
             RuntimeWarning("Number list dont exists")
             return None
     def __create_leveled_Gright_matrix(self):
-        queue_el=[]
+        queue_el=queue.Queue()
+        in_v=[0]*self.__size
         for i,el in enumerate(self.__Gleft_set):
             if len(el)==0:
-                queue_el.append(i)
-        levels=self.__search_levels(queue_el)
+                queue_el.put((0,i))
+        for i,el in enumerate(self.__Gright_set):
+            for v in el:
+                in_v[v]+=1
+        levels=self.__search_levels(queue_el,in_v)
         self.__Gright_to_leveled(levels)
     
     def __Gright_to_leveled(self,levels):
@@ -67,7 +71,7 @@ class Matrix:
                 self.__Gright_set_leveled[i][j]=self.__number[self.__Gright_set_leveled[i][j]]
 
 
-    def __search_levels(self,queue_el:list):
+    def __search_levels_old(self,queue_el:list):
         levels=[0]*self.__size
         for el in queue_el:
             q=queue.PriorityQueue()
@@ -80,6 +84,18 @@ class Matrix:
                     q.put((level-1,v))
         return levels
 
+    def __search_levels(self,queue_el:queue.Queue,in_v:list):
+        levels=[0]*self.__size
+        while not queue_el.empty():
+            level,v=queue_el.get()
+            levels[v]=level
+            for el in self.__Gright_set[v]:
+                in_v[el]-=1
+                if in_v[el]==0:
+                    queue_el.put((level+1,el))
+        return levels
+
+        
         
 
 
