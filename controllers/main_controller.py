@@ -15,6 +15,7 @@ class MainController:
         self.model.set_adjacency_matrix(self.__adjacency_matrix)
         # Получение матрицы правых инциденций из модели
         Gright_set= self.model.get_matrixs()  # Получаем данные из модели
+        levels = self.model.get_levels()
         # Получение преобразованной нумерации
         Numbers=self.model.get_node_transpose()
         if Gright_set is None:
@@ -23,6 +24,7 @@ class MainController:
             self.__to_one_start_node(Gright_set,Numbers)
             self.__set_calculated_set(self.view.matrix_Gright_table,Gright_set)
             self.__set_calculated_set(self.view.matrix_Gleft_table,Numbers) 
+            self.__set_calculated_set(self.view.matrix_level_table,levels)
     
     # Преобразование старта не с 0 а с 1
     def __to_one_start_node(self,G_set,Numbers):

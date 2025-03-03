@@ -36,6 +36,11 @@ class Matrix:
             return self.__Gright_set_leveled
         else:
             return None
+    def get_levels(self)->list|None:
+        if len(self.__levels)>0:
+            return self.__levels
+        else:
+            return None
     # Открытый интерфейс для получения новой нумерации
     def get_node_transpose(self)->list|None:
         try:
@@ -54,6 +59,7 @@ class Matrix:
             for v in el:
                 in_v[v]+=1
         levels=self.__search_levels(queue_el,in_v)
+        self.__levels=levels
         self.__Gright_to_leveled(levels)
     # Создание новой матрицы правых инцидентов с помощью перестановки координат
     def __Gright_to_leveled(self,levels):
@@ -65,6 +71,7 @@ class Matrix:
                 level[levels[i]].append(i)
             else:
                 level[levels[i]]=[i]
+        
         new_v=0
         for i in range(max(levels)+1):
             for v in level[i]:
@@ -72,10 +79,11 @@ class Matrix:
                 new_v+=1
         Gright_set_leveled_tmp=self.__Gright_set_leveled.copy()
         for i in range(self.__size):
-            self.__Gright_set_leveled[i]=Gright_set_leveled_tmp[self.__number[i]]
+            self.__Gright_set_leveled[self.__number[i]] = Gright_set_leveled_tmp[i]
+
+        # Перестановка индексов внутри строк
         for i in range(self.__size):
-            for j in range(len(self.__Gright_set_leveled[i])):
-                self.__Gright_set_leveled[i][j]=self.__number[self.__Gright_set_leveled[i][j]]
+            self.__Gright_set_leveled[i] = [self.__number[j] for j in self.__Gright_set_leveled[i]]
 
     # Устаревший метод получения уровней
     def __search_levels_old(self,queue_el:list):
